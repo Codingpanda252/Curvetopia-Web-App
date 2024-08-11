@@ -3,14 +3,14 @@ import '../styles/ShapeUploader.css';
 
 const ShapeUploader = ({ onUpload }) => {
     const handleFileChange = (e) => {
-        const file = e.target.files[0];
-        onUpload(file);
+        if (e.target.files[0]) {
+            onUpload(e.target.files[0]);
+        }
     };
 
     return (
         <div className="shape-uploader">
-            <input type="file" accept=".csv" onChange={handleFileChange} />
-            <button>Upload Shape</button>
+            <input type="file" accept=".svg" onChange={handleFileChange} />
         </div>
     );
 };

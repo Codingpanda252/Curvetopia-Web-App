@@ -1,4 +1,3 @@
-// src/components/ShapeCompletion.js
 import React, { useEffect, useState } from 'react';
 import '../styles/ShapeCompletion.css';
 
@@ -8,7 +7,7 @@ const ShapeCompletion = ({ paths }) => {
     useEffect(() => {
         if (paths.length > 0) {
             const formData = new FormData();
-            formData.append('shape', paths);
+            formData.append('file', paths);
 
             fetch('https://api.example.com/completion', {
                 method: 'POST',

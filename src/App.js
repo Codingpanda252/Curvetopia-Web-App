@@ -12,9 +12,9 @@ const App = () => {
 
     const uploadShape = (file) => {
         const formData = new FormData();
-        formData.append('shape', file);
+        formData.append('file', file);
 
-        fetch('https://api.example.com/regularize', {
+        fetch('https://adobe-qsrq.onrender.com/upload', {
             method: 'POST',
             body: formData,
         })
@@ -25,7 +25,7 @@ const App = () => {
             .catch((error) => console.error('Error:', error));
 
         // Fetch the symmetry from the API
-        fetch('https://api.example.com/symmetry', {
+        fetch('https://adobe-qsrq.onrender.com/process_csv', {
             method: 'POST',
             body: formData,
         })
@@ -35,7 +35,6 @@ const App = () => {
             })
             .catch((error) => console.error('Error:', error));
 
-        // Fetch the shape completion from the API
         fetch('https://api.example.com/completion', {
             method: 'POST',
             body: formData,
@@ -52,15 +51,15 @@ const App = () => {
             <h1>Curvetopia Web App</h1>
             <ShapeUploader onUpload={uploadShape} />
             <div className="shape-row">
-                <div className="shape-column">
+                <div>
                     <h2>Regularized Shape</h2>
                     <ShapeDisplay paths={regularizedPaths} />
                 </div>
-                <div className="shape-column">
+                <div>
                     <h2>Symmetry Identified</h2>
                     <ShapeDisplay paths={symmetryPaths} />
                 </div>
-                <div className="shape-column">
+                <div>
                     <h2>Shape Completion</h2>
                     <ShapeCompletion paths={completedPaths} />
                 </div>
