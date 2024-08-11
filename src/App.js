@@ -9,47 +9,61 @@ const App = () => {
     const [regularizedPaths, setRegularizedPaths] = useState([]);
     const [symmetryPaths, setSymmetryPaths] = useState([]);
     const [completedPaths, setCompletedPaths] = useState([]);
+    const [error, setError] = useState(null);
 
-    const uploadShape = (file) => {
+    const uploadShape = async (file) => {
         const formData = new FormData();
         formData.append('file', file);
 
-        fetch('https://adobe-qsrq.onrender.com/upload', {
-            method: 'POST',
-            body: formData,
-        })
-            .then((response) => response.json())
-            .then((data) => {
-                setRegularizedPaths(data.regularizedPaths);
-            })
-            .catch((error) => console.error('Error:', error));
+        try {
+            const regularizedResponse = await fetch('https://adobe-qsrq.onrender.com/upload', {
+                method: 'POST',
+                body: formData,
+            });
 
-        // Fetch the symmetry from the API
-        fetch('https://adobe-qsrq.onrender.com/process_csv', {
-            method: 'POST',
-            body: formData,
-        })
-            .then((response) => response.json())
-            .then((data) => {
-                setSymmetryPaths(data.symmetryPaths);
-            })
-            .catch((error) => console.error('Error:', error));
+            if (!regularizedResponse.ok) {
+                throw new Error('Failed to fetch regularized shape');
+            }
 
-        fetch('https://api.example.com/completion', {
-            method: 'POST',
-            body: formData,
-        })
-            .then((response) => response.json())
-            .then((data) => {
-                setCompletedPaths(data.completedPaths);
-            })
-            .catch((error) => console.error('Error:', error));
+            const regularizedData = await regularizedResponse.json();
+            setRegularizedPaths(regularizedData.regularizedPaths);
+
+            // Fetch the symmetry
+            const symmetryResponse = await fetch('https://adobe-qsrq.onrender.com/process_csv', {
+                method: 'POST',
+                body: formData,
+            });
+
+            if (!symmetryResponse.ok) {
+                throw new Error('Failed to fetch symmetry data');
+            }
+
+            const symmetryData = await symmetryResponse.json();
+            setSymmetryPaths(symmetryData.symmetryPaths);
+
+            const completionResponse = await fetch('https://adobe-qsrq.onrender.com/completion', {
+                method: 'POST',
+                body: formData,
+            });
+
+            if (!completionResponse.ok) {
+                throw new Error('Failed to fetch shape completion');
+            }
+
+            const completionData = await completionResponse.json();
+            setCompletedPaths(completionData.completedPaths);
+
+        } catch (error) {
+            setError(error.message);
+            console.error('Error:', error);
+        }
     };
 
     return (
         <div className="app">
             <h1>Curvetopia Web App</h1>
             <ShapeUploader onUpload={uploadShape} />
+            {error && <div className="error">{error}</div>} 
             <div className="shape-row">
                 <div>
                     <h2>Regularized Shape</h2>
