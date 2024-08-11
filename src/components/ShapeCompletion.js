@@ -1,23 +1,41 @@
-import React, { useState } from 'react';
+// src/components/ShapeCompletion.js
+import React, { useEffect, useState } from 'react';
 import '../styles/ShapeCompletion.css';
 
-const ShapeCompletion = ({ onComplete }) => {
-    const [file, setFile] = useState(null);
+const ShapeCompletion = ({ paths }) => {
+    const [completedPaths, setCompletedPaths] = useState([]);
 
-    const handleFileChange = (e) => {
-        setFile(e.target.files[0]);
-    };
+    useEffect(() => {
+        if (paths.length > 0) {
+            const formData = new FormData();
+            formData.append('shape', paths);
 
-    const handleCompleteClick = () => {
-        if (file) {
-            onComplete(file);
+            fetch('https://api.example.com/completion', {
+                method: 'POST',
+                body: formData,
+            })
+                .then((response) => response.json())
+                .then((data) => {
+                    setCompletedPaths(data.completedPaths);
+                })
+                .catch((error) => console.error('Error:', error));
         }
-    };
+    }, [paths]);
 
     return (
         <div className="shape-completion">
-            <input type="file" accept=".csv" onChange={handleFileChange} />
-            <button onClick={handleCompleteClick}>Complete Shape</button>
+            <h2>Completed Shape</h2>
+            <div className="shape-display">
+                {completedPaths.length > 0 ? (
+                    <svg width="200" height="200">
+                        {completedPaths.map((path, index) => (
+                            <path key={index} d={path} stroke="black" fill="none" />
+                        ))}
+                    </svg>
+                ) : (
+                    <p>No completed shape available</p>
+                )}
+            </div>
         </div>
     );
 };

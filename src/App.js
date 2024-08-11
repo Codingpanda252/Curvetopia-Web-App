@@ -3,7 +3,7 @@ import ShapeUploader from './components/ShapeUploader';
 import ShapeDisplay from './components/ShapeDisplay';
 import ShapeCompletion from './components/ShapeCompletion';
 import Footer from './components/Footer'; 
-import './App.css';
+import './styles/App.css';
 
 const App = () => {
     const [regularizedPaths, setRegularizedPaths] = useState([]);
@@ -14,7 +14,6 @@ const App = () => {
         const formData = new FormData();
         formData.append('shape', file);
 
-        // Fetch the regularized shape from the API
         fetch('https://api.example.com/regularize', {
             method: 'POST',
             body: formData,
@@ -53,20 +52,20 @@ const App = () => {
             <h1>Curvetopia Web App</h1>
             <ShapeUploader onUpload={uploadShape} />
             <div className="shape-row">
-                <div>
+                <div className="shape-column">
                     <h2>Regularized Shape</h2>
                     <ShapeDisplay paths={regularizedPaths} />
                 </div>
-                <div>
+                <div className="shape-column">
                     <h2>Symmetry Identified</h2>
                     <ShapeDisplay paths={symmetryPaths} />
                 </div>
-                <div>
+                <div className="shape-column">
                     <h2>Shape Completion</h2>
                     <ShapeCompletion paths={completedPaths} />
                 </div>
             </div>
-            <Footer /> {/* Add Footer */}
+            <Footer /> 
         </div>
     );
 };
