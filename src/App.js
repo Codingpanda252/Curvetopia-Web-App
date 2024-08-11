@@ -2,7 +2,8 @@ import React, { useState } from 'react';
 import ShapeUploader from './components/ShapeUploader';
 import ShapeDisplay from './components/ShapeDisplay';
 import ShapeCompletion from './components/ShapeCompletion';
-import './styles/App.css';
+import Footer from './components/Footer'; 
+import './App.css';
 
 const App = () => {
     const [regularizedPaths, setRegularizedPaths] = useState([]);
@@ -34,14 +35,9 @@ const App = () => {
                 setSymmetryPaths(data.symmetryPaths);
             })
             .catch((error) => console.error('Error:', error));
-    };
 
-    const completeShape = (file) => {
-        const formData = new FormData();
-        formData.append('shape', file);
-
-        // Fetch the completed shape from the API
-        fetch('https://api.example.com/complete', {
+        // Fetch the shape completion from the API
+        fetch('https://api.example.com/completion', {
             method: 'POST',
             body: formData,
         })
@@ -54,16 +50,23 @@ const App = () => {
 
     return (
         <div className="app">
-            <h1>Curvetopia</h1>
+            <h1>Curvetopia Web App</h1>
+            <ShapeUploader onUpload={uploadShape} />
             <div className="shape-row">
-                <ShapeUploader onUpload={uploadShape} />
-                <ShapeDisplay paths={regularizedPaths} title="Regularized Paths" />
-                <ShapeCompletion onComplete={completeShape} />
+                <div>
+                    <h2>Regularized Shape</h2>
+                    <ShapeDisplay paths={regularizedPaths} />
+                </div>
+                <div>
+                    <h2>Symmetry Identified</h2>
+                    <ShapeDisplay paths={symmetryPaths} />
+                </div>
+                <div>
+                    <h2>Shape Completion</h2>
+                    <ShapeCompletion paths={completedPaths} />
+                </div>
             </div>
-            <div className="shape-row">
-                <ShapeDisplay paths={symmetryPaths} title="Symmetry Paths" />
-                <ShapeDisplay paths={completedPaths} title="Completed Paths" />
-            </div>
+            <Footer /> {/* Add Footer */}
         </div>
     );
 };
