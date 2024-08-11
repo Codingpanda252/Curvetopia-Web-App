@@ -1,0 +1,39 @@
+.app {
+    font-family: 'Arial', sans-serif;
+    text-align: center;
+    padding: 20px;
+    background: linear-gradient(135deg, #a1c4fd, #c2e9fb);
+    color: #333;
+}
+
+h1 {
+    color: #051c35;
+    margin-bottom: 20px;
+}
+
+.shape-row {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 20px;
+    margin-bottom: 20px;
+}
+
+.shape-row > div {
+    flex: 1;
+    min-width: 300px;
+}
+
+button {
+    background-color: #4a90e2;
+    color: #fff;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+button:hover {
+    background-color: #357abd;
+}
